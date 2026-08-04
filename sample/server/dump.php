@@ -22,7 +22,7 @@ function dump() : void {
 	syslog(LOG_INFO,'FILES: '.var_export($_FILES,true));
 	$info['FILES'] = $_FILES;
 
-	syslog(LOG_INFO,'COOKIE: '.var_export($_FILES,true));
+	syslog(LOG_INFO,'COOKIE: '.var_export($_COOKIE,true));
 	$info['COOKIE'] = $_COOKIE;
 
 	$header = getallheaders();
