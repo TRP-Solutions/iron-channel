@@ -29,6 +29,10 @@ switch($path[0]) {
 		require_once __DIR__.'/echo.php';
 		server_echo();
 		break;
+	case 'picture':
+		require_once __DIR__.'/picture.php';
+		server_picture();
+		break;
 	default:
 		echo 'OK';
 		if($path !== ['']) {
