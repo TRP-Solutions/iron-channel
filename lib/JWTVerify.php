@@ -51,6 +51,9 @@ class JWTVerify {
 	}
 
 	public function payload(string $key) : string|int {
+		if(!isset($this->jwt_payload[$key])) {
+			throw new \Exception('JWT payload:'.$key.' not found',400);
+		}
 		return $this->jwt_payload[$key];
 	}
 
