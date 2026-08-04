@@ -24,11 +24,11 @@ switch($path[0]) {
 	case 'time':
 		require_once __DIR__.'/time.php';
 		server_time();
-		exit;
+		break;
 	case 'echo':
 		require_once __DIR__.'/echo.php';
 		server_echo();
-		exit;
+		break;
 	default:
 		echo 'OK';
 		if($path !== ['']) {

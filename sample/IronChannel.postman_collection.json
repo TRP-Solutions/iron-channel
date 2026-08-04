@@ -1,0 +1,137 @@
+{
+  "info": {
+    "_postman_id": "6c9d7b9d-19f6-4c21-a989-177aaff5e1cc",
+    "name": "IronChannel",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "30052488"
+  },
+  "item": [
+    {
+      "name": "JWT",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "const now = Math.floor(Date.now() / 1000);",
+              "",
+              "pm.environment.set(\"iat\", now);",
+              "pm.environment.set(\"exp\", now + 5); // Expires in 5 seconds",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "jwt",
+          "jwt": [
+            {
+              "key": "secret",
+              "value": "{{Secret}}",
+              "type": "string"
+            },
+            {
+              "key": "payload",
+              "value": "{\n    \"app_id\": \"skynet\",\n    \"iat\": {{iat}},\n    \"exp\": {{exp}}\n}",
+              "type": "string"
+            },
+            {
+              "key": "header",
+              "value": "{\n    \"typ\":\"JWT\"\n}",
+              "type": "string"
+            },
+            {
+              "key": "addTokenTo",
+              "value": "header",
+              "type": "string"
+            },
+            {
+              "key": "isSecretBase64Encoded",
+              "value": false,
+              "type": "boolean"
+            },
+            {
+              "key": "algorithm",
+              "value": "HS256",
+              "type": "string"
+            },
+            {
+              "key": "headerPrefix",
+              "value": "Bearer",
+              "type": "string"
+            },
+            {
+              "key": "queryParamKey",
+              "value": "token",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"a\":100,\"b\":\"200\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{BaseURL}}/sample/server/calculate/add",
+          "host": [
+            "{{BaseURL}}"
+          ],
+          "path": [
+            "sample",
+            "server",
+            "calculate",
+            "add"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "BaseURL",
+      "value": "",
+      "description": "Eg. https://localhost/github/iron-channel"
+    },
+    {
+      "key": "Secret",
+      "value": "",
+      "description": "Eg. hasta-la-vista-human"
+    }
+  ]
+}
