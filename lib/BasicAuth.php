@@ -17,7 +17,7 @@ class BasicAuth implements Auth {
 
 	public static function get() : BasicAuth {
 		if(empty($_SERVER['PHP_AUTH_USER']) || empty($_SERVER['PHP_AUTH_PW'])) {
-			throw new \Exception('Unauthorized',401);
+			throw new \Exception('BasicAuth unauthorized',401);
 		}
 		return new self($_SERVER['PHP_AUTH_USER'],$_SERVER['PHP_AUTH_PW']);
 	}
@@ -27,6 +27,12 @@ class BasicAuth implements Auth {
 	}
 	public function match(#[\SensitiveParameter] string $password) : bool {
 		return hash_equals($this->password,$password);
+	}
+	public function verify(#[\SensitiveParameter] string $password) : true {
+		if(!$this->match($password)) {
+			throw new \Exception('BasicAuth wrong password',403);
+		}
+		return true;
 	}
 	public function curl_header() : array {
 		return [];

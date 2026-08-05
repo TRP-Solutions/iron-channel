@@ -9,9 +9,7 @@ function server_filedrop() {
 	try {
 		if(true) {
 			$bearer = \TRP\IronChannel\Bearer::get();
-			if(!$bearer->match('_TopSecret!*')) {
-				throw new \Exception('Forbidden',403);
-			}
+			$bearer->verify('_TopSecret!*');
 		}
 
 		echo '<xml>'.PHP_EOL;

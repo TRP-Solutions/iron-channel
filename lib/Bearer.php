@@ -16,10 +16,10 @@ class Bearer implements Auth {
 	public static function get() : Bearer {
 		$headers = getallheaders();
 		if(empty($headers['Authorization'])) {
-			throw new \Exception('Missing Authorization Header',401);
+			throw new \Exception('Bearer missing Authorization header',401);
 		}
 		if(preg_match('/^Bearer\s+(\S+)$/i', $headers['Authorization'], $matches)!==1) {
-			throw new \Exception('Missing Bearer Token',401);
+			throw new \Exception('Bearer missing token',401);
 		}
 		return new self($matches[1]);
 	}
@@ -30,7 +30,12 @@ class Bearer implements Auth {
 	public function match(#[\SensitiveParameter] string $token) : bool {
 		return hash_equals($this->token,$token);
 	}
-
+	public function verify(#[\SensitiveParameter] string $token) : true {
+		if(!$this->match($token)) {
+			throw new \Exception('Bearer wrong token',403);
+		}
+		return true;
+	}
 	public function curl_header() : array {
 		return ['Authorization: Bearer '.$this->token];
 	}
