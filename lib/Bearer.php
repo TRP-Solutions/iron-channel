@@ -11,6 +11,7 @@ final class Bearer extends CurlOpt implements Auth {
 
 	private bool $authenticated = false;
 	private string $token;
+	private $body_hash_func;
 
 	function __construct(#[\SensitiveParameter] string $token) {
 		$this->token = $token;
@@ -41,7 +42,15 @@ final class Bearer extends CurlOpt implements Auth {
 	public function authenticated() : bool {
 		return $this->authenticated;
 	}
+	public function body_hash(callable $hashfunc) : void {
+		$this->body_hash_func = $hashfunc;
+	}
 	public function curl_header() : array {
-		return ['Authorization: Bearer '.$this->token];
+		$return = ['Authorization: Bearer '.$this->token];
+		$body_hash = ($this->body_hash_func)('sha256');
+		if($body_hash) {
+			$return[] = 'X-Body-Hash: '.'sha256='.$body_hash;
+		}
+		return $return;
 	}
 }

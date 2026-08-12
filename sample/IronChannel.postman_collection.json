@@ -17,6 +17,9 @@
               "",
               "pm.environment.set(\"iat\", now);",
               "pm.environment.set(\"exp\", now + 5); // Expires in 5 seconds",
+              "",
+              "const hash = CryptoJS.SHA256(pm.request.body.raw).toString(CryptoJS.enc.Hex);",
+              "pm.variables.set(\"body_hash\", \"sha256:\" + hash);",
               ""
             ],
             "type": "text/javascript",
@@ -30,13 +33,13 @@
           "type": "jwt",
           "jwt": [
             {
-              "key": "secret",
-              "value": "{{Secret}}",
+              "key": "payload",
+              "value": "{\n    \"app_id\": \"skynet\",\n    \"iat\": {{iat}},\n    \"exp\": {{exp}},\n    \"body_hash\": \"{{body_hash}}\"\n}",
               "type": "string"
             },
             {
-              "key": "payload",
-              "value": "{\n    \"app_id\": \"skynet\",\n    \"iat\": {{iat}},\n    \"exp\": {{exp}}\n}",
+              "key": "secret",
+              "value": "{{Secret}}",
               "type": "string"
             },
             {

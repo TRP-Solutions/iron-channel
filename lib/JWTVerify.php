@@ -44,11 +44,26 @@ final class JWTVerify implements Auth {
 		if(time() >= $this->jwt_payload['exp']) {
 			throw new \Exception('JWT payload:exp expired',401);
 		}
+		self::validate_body($this->jwt_payload['body_hash'] ?? null);
 	}
 
 	public static function get() : JWTVerify {
 		$auth = new self();
 		return $auth;
+	}
+	public static function validate_body(?string $body_hash) : void {
+		if(empty($body_hash)) {
+			throw new \Exception('JWT payload:body_hash not found',401);
+		}
+		$body_hash = explode(':',$body_hash);
+		if(sizeof($body_hash)!==2) {
+			throw new \Exception('JWT payload:body_hash invalid format',401);
+		}
+		list($algo,$user_string) = $body_hash;
+		$known_string = hash_file($algo,'php://input');
+		if(!hash_equals($known_string, $user_string)) {
+			throw new \Exception('JWT payload:body_hash incorrect',401);
+		}
 	}
 	public static function process(callable $callback) : JWTVerify {
 		$auth = new self();

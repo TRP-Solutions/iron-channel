@@ -11,6 +11,7 @@ final class JWTGenerate extends CurlOpt {
 	private int $expire;
 	private array $jwt_header = [];
 	private array $jwt_payload = [];
+	private $body_hash_func;
 
 	function __construct(#[\SensitiveParameter] $secret, int $expire = 30) {
 		$this->secret = $secret;
@@ -21,6 +22,10 @@ final class JWTGenerate extends CurlOpt {
 		$this->jwt_payload[$key] = $value;
 	}
 
+	public function body_hash(callable $hashfunc) : void {
+		$this->body_hash_func = $hashfunc;
+	}
+
 	public function curl_header() : array {
 		$this->jwt_header['typ'] = 'JWT';
 		$this->jwt_header['alg'] = 'HS256';
@@ -29,6 +34,8 @@ final class JWTGenerate extends CurlOpt {
 		if($this->expire) {
 			$this->jwt_payload['exp'] = time() + $this->expire;
 		}
+
+		$this->jwt_payload['body_hash'] = 'sha256:'.($this->body_hash_func)('sha256');
 
 		$data = self::jwt_encode(json_encode($this->jwt_header));
 		$data .= '.'.self::jwt_encode(json_encode($this->jwt_payload));

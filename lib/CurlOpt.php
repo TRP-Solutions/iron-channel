@@ -11,4 +11,7 @@ class CurlOpt {
 		return [];
 	}
 	public function curl_setopt(\CurlHandle $ch) : void {}
+	public function curl_hash(string $algo) : string {
+		throw new \Exception(get_class($this).' function curl_hash not implemented but is required by Auth',501);
+	}
 }

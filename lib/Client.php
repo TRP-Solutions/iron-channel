@@ -27,6 +27,10 @@ class Client {
 	public function execute() : mixed {
 		$ch = curl_init($this->url());
 
+		if($this->auth && method_exists($this->auth, 'body_hash')){
+			$this->auth->body_hash([$this->request, 'curl_hash']);
+		}
+
 		$header = $this->header;
 		array_push($header, ...$this->request->curl_header());
 		if($this->auth) {

@@ -7,12 +7,12 @@ declare(strict_types=1);
 
 function server_filedrop() {
 	try {
-		if(false) {
+		if(true) {
 			$auth = \TRP\IronChannel\Bearer::get();
 			$auth->validate('_TopSecret!*');
 			\TRP\IronChannel\Server::confirm($auth);
 		}
-		elseif(true) {
+		elseif(false) {
 			$callback = function($header) {var_dump($header);return '_TopSecret!*';};
 			$auth = \TRP\IronChannel\Bearer::process($callback);
 			\TRP\IronChannel\Server::confirm($auth);

@@ -65,4 +65,7 @@ class JSON extends CurlOpt implements Data {
 			curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($this->data));
 		}
 	}
+	public function curl_hash(string $algo) : string {
+		return hash($algo, json_encode($this->data));
+	}
 }
