@@ -6,7 +6,7 @@ https://github.com/TRP-Solutions/iron-channel/blob/main/LICENSE
 declare(strict_types=1);
 namespace TRP\IronChannel;
 
-class RawString implements Data {
+class RawString extends CurlOpt implements Data {
 	private string $data;
 
 	function __construct(string $data) {
@@ -23,10 +23,6 @@ class RawString implements Data {
 		stream_copy_to_stream($input, $output);
 		fclose($input);
 		fclose($output);
-	}
-
-	public function curl_header() : array {
-		return [];
 	}
 
 	public function curl_setopt(\CurlHandle $ch) : void {
