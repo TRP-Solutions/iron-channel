@@ -42,9 +42,8 @@ class JSON extends CurlOpt implements Data {
 		exit;
 	}
 	public static function error(string $string,int $code = 400) : void {
-		http_response_code($code);
 		$error = ['code' => $code,'message' => $string];
-		self::output($error);
+		self::output($error,$code);
 	}
 
 	public function curl_header() : array {
