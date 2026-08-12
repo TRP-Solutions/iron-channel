@@ -59,6 +59,10 @@ try {
 catch(\Exception $e) {
 	sample_header('Exception handler');
 	echo $e->getMessage().PHP_EOL;
+
+	sample_header('Get raw response body');
+	echo $client->response().PHP_EOL;
+	exit;
 }
 
 sample_header('Response');

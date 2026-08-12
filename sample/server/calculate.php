@@ -12,17 +12,16 @@ function server_calculate($operation) {
 
 	try {
 		if(true) {
-			$jwt = new \TRP\IronChannel\JWTVerify();
-			if($jwt->payload('app_id')==='skynet') {
-				$secret = 'hasta-la-vista-human';
-				$jwt->verify($secret);
-			}
-			else {
-				throw new \Exception('Unauthorized',401);
-			}
+			$jwt = \TRP\IronChannel\JWTVerify::process('findsecret');
+			\TRP\IronChannel\Server::confirm($jwt);
+		}
+		elseif(false) {
+			$jwt = \TRP\IronChannel\JWTVerify::get();
+			$jwt->validate('hasta-la-vista-human');
+			\TRP\IronChannel\Server::confirm($jwt);
 		}
 
-		$json = \TRP\IronChannel\JSON::input();
+		$json = \TRP\IronChannel\JSON::read();
 		if(!is_numeric($json->a ?? null) || !is_numeric($json->b ?? null)) {
 			\TRP\IronChannel\JSON::error('Not numbers',400);
 		}
@@ -37,5 +36,12 @@ function server_calculate($operation) {
 		\TRP\IronChannel\JSON::error($e->getMessage(),$e->getCode());
 	}
 
-	\TRP\IronChannel\JSON::output($reply);
+	\TRP\IronChannel\JSON::output($reply,201);
+}
+
+function findsecret(\TRP\IronChannel\JWTVerify $jwt) : string {
+	if($jwt->payload('app_id')==='skynet') {
+		return 'hasta-la-vista-human';
+	}
+	throw new \Exception('Human found',403);
 }

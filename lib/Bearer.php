@@ -6,7 +6,10 @@ https://github.com/TRP-Solutions/iron-channel/blob/main/LICENSE
 declare(strict_types=1);
 namespace TRP\IronChannel;
 
-class Bearer implements Auth {
+final class Bearer extends CurlOpt implements Auth {
+	use BearerTrait;
+
+	private bool $authenticated = false;
 	private string $token;
 
 	function __construct(#[\SensitiveParameter] string $token) {
@@ -15,31 +18,30 @@ class Bearer implements Auth {
 
 	public static function get() : Bearer {
 		$headers = getallheaders();
-		if(empty($headers['Authorization'])) {
-			throw new \Exception('Bearer missing Authorization header',401);
+		return new self(self::get_authorization($headers));
+	}
+	public static function process(callable $callback) : Bearer {
+		$headers = getallheaders();
+		$auth = new self(self::get_authorization($headers));
+		unset($headers['Authorization']);
+		$token = $callback($headers);
+		if(empty($token)) {
+			throw new \Exception('Bearer empty token',401);
 		}
-		if(preg_match('/^Bearer\s+(\S+)$/i', $headers['Authorization'], $matches)!==1) {
-			throw new \Exception('Bearer missing token',401);
-		}
-		return new self($matches[1]);
+		$auth->validate($token);
+		return $auth;
 	}
-
-	public function token() : string {
-		return $this->token;
-	}
-	public function match(#[\SensitiveParameter] string $token) : bool {
-		return hash_equals($this->token,$token);
-	}
-	public function verify(#[\SensitiveParameter] string $token) : true {
-		if(!$this->match($token)) {
+	public function validate(#[\SensitiveParameter] string $token) : void {
+		if(!hash_equals($this->token,$token)) {
 			throw new \Exception('Bearer wrong token',403);
 		}
-		return true;
+		$this->authenticated = true;
+	}
+
+	public function authenticated() : bool {
+		return $this->authenticated;
 	}
 	public function curl_header() : array {
 		return ['Authorization: Bearer '.$this->token];
-	}
-	public function curl_setopt(\CurlHandle $ch) : void {
-		// NOP
 	}
 }

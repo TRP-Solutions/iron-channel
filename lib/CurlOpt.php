@@ -6,9 +6,9 @@ https://github.com/TRP-Solutions/iron-channel/blob/main/LICENSE
 declare(strict_types=1);
 namespace TRP\IronChannel;
 
-class Get extends CurlOpt implements Data {
-	public static function read(mixed $name = null) : mixed {
-		Server::allowed();
-		return $_GET[$name] ?? null;
+class CurlOpt {
+	public function curl_header() : array {
+		return [];
 	}
+	public function curl_setopt(\CurlHandle $ch) : void {}
 }

@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace TRP\IronChannel;
 
 interface Auth {
-	public function curl_header() : array;
-	public function curl_setopt(\CurlHandle $ch) : void;
+	public static function get() : Auth;
+	public static function process(callable $callback) : Auth;
+	public function authenticated() : bool;
 }

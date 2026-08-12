@@ -6,7 +6,7 @@ https://github.com/TRP-Solutions/iron-channel/blob/main/LICENSE
 declare(strict_types=1);
 namespace TRP\IronChannel;
 
-class JWTGenerate implements Auth {
+final class JWTGenerate extends CurlOpt {
 	private string|false $secret;
 	private int $expire;
 	private array $jwt_header = [];
@@ -35,9 +35,6 @@ class JWTGenerate implements Auth {
 		$signuture = hash_hmac('sha256',$data,$this->secret,true);
 		$jwt = $data.'.'.self::jwt_encode($signuture);
 		return ['Authorization: Bearer '.$jwt];
-	}
-	public function curl_setopt(\CurlHandle $ch) : void {
-		// NOP
 	}
 
 	private static function jwt_encode(string $part) : string {

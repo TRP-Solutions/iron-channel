@@ -7,7 +7,8 @@ declare(strict_types=1);
 
 function server_echo() {
 	try {
-		$json = \TRP\IronChannel\JSON::input();
+		\TRP\IronChannel\Server::confirm(new \TRP\IronChannel\NoAuth());
+		$json = \TRP\IronChannel\JSON::read();
 		$reply = $json->message ?? 'Empty';
 		$reply .= ' - Back';
 		$reply = strrev($reply);

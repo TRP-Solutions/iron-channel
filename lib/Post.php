@@ -6,7 +6,7 @@ https://github.com/TRP-Solutions/iron-channel/blob/main/LICENSE
 declare(strict_types=1);
 namespace TRP\IronChannel;
 
-class Post implements Data {
+class Post extends CurlOpt implements Data {
 	private array $data = [];
 
 	function file(string $key, string $filename, ?string $mime_type = null, ?string $posted_filename = null) {
@@ -19,9 +19,11 @@ class Post implements Data {
 		$this->data[$key] = $value;
 	}
 
-	public function curl_header() : array {
-		return [];
+	public static function read(mixed $name = null) : mixed {
+		Server::allowed();
+		return $_POST[$name] ?? null;
 	}
+
 	public function curl_setopt(\CurlHandle $ch) : void {
 		curl_setopt($ch, CURLOPT_POST, true);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $this->data);

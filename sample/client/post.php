@@ -22,6 +22,7 @@ $client = new \TRP\IronChannel\Client('/sample/server/filedrop',$post);
 
 if(true) {
 	$client->auth(new \TRP\IronChannel\Bearer('_TopSecret!*'));
+	$client->header('X-Tenant','FamilyA');
 }
 
 try {

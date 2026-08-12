@@ -6,7 +6,7 @@ https://github.com/TRP-Solutions/iron-channel/blob/main/LICENSE
 declare(strict_types=1);
 namespace TRP\IronChannel;
 
-class JSON implements Data {
+class JSON extends CurlOpt implements Data {
 	private mixed $data = null;
 	private string $method = 'GET';
 
@@ -20,7 +20,8 @@ class JSON implements Data {
 		}
 	}
 
-	public static function input() : string|array|object|null {
+	public static function read(mixed $name = null) : mixed {
+		Server::allowed();
 		$input = file_get_contents('php://input');
 		if(empty($input)) {
 			throw new \Exception('EmptyInput',400);
@@ -37,7 +38,6 @@ class JSON implements Data {
 		echo json_encode($value);
 		exit;
 	}
-
 	public static function error(string $string,int $code = 400) : void {
 		http_response_code($code);
 		$error = ['code' => $code,'message' => $string];
@@ -47,7 +47,6 @@ class JSON implements Data {
 	public function curl_header() : array {
 		return ['Content-Type:application/json'];
 	}
-
 	public function curl_setopt(\CurlHandle $ch) : void {
 		switch($this->method) {
 			case 'POST':

@@ -13,8 +13,16 @@ class RawString implements Data {
 		$this->data = $data;
 	}
 
-	public static function input() : string|array|object|null {
+	public static function read(mixed $name = null) : mixed {
+		Server::allowed();
 		return file_get_contents('php://input');
+	}
+	public static function save($path) : void {
+		$input = fopen('php://input', 'rb');
+		$output = fopen($path, 'wb');
+		stream_copy_to_stream($input, $output);
+		fclose($input);
+		fclose($output);
 	}
 
 	public function curl_header() : array {

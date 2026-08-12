@@ -7,15 +7,24 @@ declare(strict_types=1);
 
 function server_filedrop() {
 	try {
-		if(true) {
-			$bearer = \TRP\IronChannel\Bearer::get();
-			$bearer->verify('_TopSecret!*');
+		if(false) {
+			$auth = \TRP\IronChannel\Bearer::get();
+			$auth->validate('_TopSecret!*');
+			\TRP\IronChannel\Server::confirm($auth);
+		}
+		elseif(true) {
+			$callback = function($header) {var_dump($header);return '_TopSecret!*';};
+			$auth = \TRP\IronChannel\Bearer::process($callback);
+			\TRP\IronChannel\Server::confirm($auth);
 		}
 
 		echo '<xml>'.PHP_EOL;
-		echo ' <eventname>'.htmlspecialchars($_POST['eventname']).'</eventname>'.PHP_EOL;
-		echo ' <file>'.htmlspecialchars($_FILES['file']['name']).'</file>'.PHP_EOL;
-		echo ' <file2>'.htmlspecialchars($_FILES['file2']['name']).'</file2>'.PHP_EOL;
+		$eventname = \TRP\IronChannel\Post::read('eventname');
+		echo ' <eventname>'.htmlspecialchars($eventname).'</eventname>'.PHP_EOL;
+		$file = \TRP\IronChannel\Files::read('file');
+		echo ' <file>'.htmlspecialchars($file['name']).'</file>'.PHP_EOL;
+		$file2 = \TRP\IronChannel\Files::read('file2');
+		echo ' <file2>'.htmlspecialchars($file2['name']).'</file2>'.PHP_EOL;
 		echo '</xml>'.PHP_EOL;
 	}
 	catch(\Exception $e) {

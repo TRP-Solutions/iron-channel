@@ -15,7 +15,7 @@ $baseurl = sample_baseurl();
 $json = new \TRP\IronChannel\JSON(['a' => 10,'b' => 20]);
 $client = new \TRP\IronChannel\Client('/sample/server/calculate/add',$json);
 
-if(false) {
+if(true) {
 	sample_header('JWT Secret suggestion');
 	$secret = \TRP\IronChannel\JWTGenerate::generate_secret(48);
 	echo 'Secret: '.$secret.PHP_EOL;

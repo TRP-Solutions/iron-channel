@@ -8,16 +8,17 @@ declare(strict_types=1);
 function server_time() {
 	try {
 		if(true) {
+			$auth = \TRP\IronChannel\BasicAuth::process('findhash');
+		}
+		elseif(false) {
 			$auth = \TRP\IronChannel\BasicAuth::get();
-			if($auth->id()!=='john') {
-				throw new \Exception('Unknown id',403);
-			}
-			$auth->verify('Pa55w0rd');
+			$auth->validate('john','$2y$10$xWRs2GTUyZ8QRiAt9fdAau5UDbA2St0r0MOXSSJuXOKt636UzYckC');
 		}
-
-		if(empty($_GET['timezone'])) {
-			throw new \Exception('No timezome',400);
+		else {
+			$auth = new \TRP\IronChannel\NoAuth();
 		}
+		\TRP\IronChannel\Server::confirm($auth);
+		$timezone = \TRP\IronChannel\Get::read('timezone');
 	}
 	catch(\Exception $e) {
 		http_response_code($e->getCode());
@@ -26,6 +27,14 @@ function server_time() {
 	}
 
 	sleep(2);
-	date_default_timezone_set($_GET['timezone']);
-	echo date('r');
+	echo "Timezone: ".$timezone.PHP_EOL;
+	date_default_timezone_set($timezone);
+	echo "Date: ".date('r');
+}
+
+function findhash(string $id) : string {
+	if($id !== 'john') {
+		throw new \Exception('Unknown user',403);
+	}
+	return '$2y$10$xWRs2GTUyZ8QRiAt9fdAau5UDbA2St0r0MOXSSJuXOKt636UzYckC';
 }

@@ -6,7 +6,10 @@ https://github.com/TRP-Solutions/iron-channel/blob/main/LICENSE
 declare(strict_types=1);
 namespace TRP\IronChannel;
 
-class JWTVerify {
+final class JWTVerify implements Auth {
+	use BearerTrait;
+
+	private bool $authenticated = false;
 	private string $signature;
 	private string $header;
 	private string $payload;
@@ -15,7 +18,8 @@ class JWTVerify {
 	private array $jwt_payload = [];
 
 	function __construct() {
-		$jwt = \TRP\IronChannel\Bearer::get()->token();
+		$headers = getallheaders();
+		$jwt = self::get_authorization($headers);
 		[$this->header, $this->payload, $signature] = explode('.', $jwt);
 
 		$this->signature = self::jwt_decode($signature);
@@ -42,12 +46,25 @@ class JWTVerify {
 		}
 	}
 
-	public function verify(#[\SensitiveParameter] string $secret) : true {
+	public static function get() : JWTVerify {
+		$auth = new self();
+		return $auth;
+	}
+	public static function process(callable $callback) : JWTVerify {
+		$auth = new self();
+		$secret = $callback($auth);
+		$auth->validate($secret);
+		return $auth;
+	}
+	public function validate(#[\SensitiveParameter] string $secret) : void {
 		$expected = hash_hmac('sha256',$this->header.'.'.$this->payload,$secret,true);
 		if(!hash_equals($expected, $this->signature)) {
 			throw new \Exception('JWT invalid signature',401);
 		}
-		return true;
+		$this->authenticated = true;
+	}
+	public function authenticated() : bool {
+		return $this->authenticated;
 	}
 
 	public function payload(string $key) : string|int {

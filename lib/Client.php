@@ -13,8 +13,9 @@ class Client {
 
 	private string $url;
 	private array $query = [];
+	private array $header = [];
 	private Data $request;
-	private Auth|false $auth = false;
+	private Auth|JWTGenerate|false $auth = false;
 	private string|false $response;
 	private string $response_type;
 
@@ -26,7 +27,8 @@ class Client {
 	public function execute() : mixed {
 		$ch = curl_init($this->url());
 
-		$header = $this->request->curl_header();
+		$header = $this->header;
+		array_push($header, ...$this->request->curl_header());
 		if($this->auth) {
 			array_push($header, ...$this->auth->curl_header());
 		}
@@ -94,8 +96,11 @@ class Client {
 	public static function log(Log|false $log) : void {
 		self::$log = $log;
 	}
-	public function auth(Auth|false $auth) : void {
+	public function auth(Auth|JWTGenerate|false $auth) : void {
 		$this->auth = $auth;
+	}
+	public function header(string $key, string $value) : void {
+		$this->header[] = $key.': '.$value;
 	}
 	public static function setopt(int $option, mixed $value) : void {
 		self::$option[$option] = $value;

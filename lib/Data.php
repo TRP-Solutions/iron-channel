@@ -7,6 +7,5 @@ declare(strict_types=1);
 namespace TRP\IronChannel;
 
 interface Data {
-	public function curl_header() : array;
-	public function curl_setopt(\CurlHandle $ch) : void;
+	public static function read(mixed $name = null) : mixed;
 }
