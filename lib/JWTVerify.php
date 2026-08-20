@@ -20,6 +20,9 @@ final class JWTVerify implements Auth {
 	function __construct() {
 		$headers = getallheaders();
 		$jwt = self::get_authorization($headers);
+		if(substr_count($jwt,'.')!==2) {
+			throw new \Exception('JWT malformed',400);
+		}
 		[$this->header, $this->payload, $signature] = explode('.', $jwt);
 
 		$this->signature = self::jwt_decode($signature);
