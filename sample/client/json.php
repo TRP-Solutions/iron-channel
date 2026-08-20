@@ -12,8 +12,8 @@ sample_start();
 $baseurl = sample_baseurl();
 \TRP\IronChannel\Client::baseurl($baseurl);
 
-$json = new \TRP\IronChannel\JSON(['a' => 10,'b' => 20,'timestamp' => time()]);
-$client = new \TRP\IronChannel\Client('/sample/server/calculate/add',$json);
+$data = new \TRP\IronChannel\JSON(['a' => 10,'b' => 20,'timestamp' => time()]);
+$client = new \TRP\IronChannel\Client('/sample/server/calculate/add',$data);
 
 if(true) {
 	sample_header('JWT Secret suggestion');
