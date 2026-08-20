@@ -13,7 +13,7 @@ $baseurl = sample_baseurl();
 \TRP\IronChannel\Client::baseurl($baseurl);
 \TRP\IronChannel\Client::log(new \TRP\IronChannel\Syslog());
 
-$raw = new \TRP\IronChannel\RawString('RAW_FILE');
+$raw = new \TRP\IronChannel\RawString('RAW_FILE','text/plain');
 
 $client = new \TRP\IronChannel\Client('/sample/server/picture',$raw);
 $client->query('filename','test.jpg');

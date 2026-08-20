@@ -9,13 +9,13 @@ namespace TRP\IronChannel;
 class Post extends CurlOpt implements Data {
 	private array $data = [];
 
-	function file(string $key, string $filename, ?string $mime_type = null, ?string $posted_filename = null) {
+	public function file(string $key, string $filename, ?string $mime_type = null, ?string $posted_filename = null) : void {
 		$this->data[$key] = new \CURLFile($filename,$mime_type,$posted_filename);
 	}
-	function filestring(string $key, string $data, string $postname, string $mime = 'application/octet-stream') {
+	public function filestring(string $key, string $data, string $postname, string $mime = 'application/octet-stream') : void {
 		$this->data[$key] = new \CURLStringFile($data,$postname,$mime);
 	}
-	function value(string $key, string|int $value) {
+	public function value(string $key, string|int $value) : void {
 		$this->data[$key] = $value;
 	}
 

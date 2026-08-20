@@ -8,9 +8,11 @@ namespace TRP\IronChannel;
 
 class RawString extends CurlOpt implements Data {
 	private string $data;
+	private string $type;
 
-	function __construct(string $data) {
+	function __construct(string $data,string $type = 'application/octet-stream') {
 		$this->data = $data;
+		$this->type = $type;
 	}
 
 	public static function read(mixed $name = null) : mixed {
@@ -25,6 +27,9 @@ class RawString extends CurlOpt implements Data {
 		fclose($output);
 	}
 
+	public function curl_header() : array {
+		return ['Content-Type: '.$this->type];
+	}
 	public function curl_setopt(\CurlHandle $ch) : void {
 		curl_setopt($ch, CURLOPT_POST, true);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $this->data);

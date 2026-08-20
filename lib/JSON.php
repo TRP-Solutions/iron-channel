@@ -47,7 +47,7 @@ class JSON extends CurlOpt implements Data {
 	}
 
 	public function curl_header() : array {
-		return ['Content-Type:application/json'];
+		return ['Content-Type: application/json'];
 	}
 	public function curl_setopt(\CurlHandle $ch) : void {
 		switch($this->method) {
