@@ -34,4 +34,7 @@ class RawString extends CurlOpt implements Data {
 		curl_setopt($ch, CURLOPT_POST, true);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $this->data);
 	}
+	public function curl_hash(string $algo) : string {
+		return hash($algo, $this->data);
+	}
 }
