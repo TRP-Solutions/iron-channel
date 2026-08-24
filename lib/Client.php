@@ -17,7 +17,7 @@ class Client {
 	private Data $request;
 	private Auth|JWTGenerate|false $auth = false;
 	private string|false $response;
-	private string $response_type;
+	private string|false $response_type;
 
 	function __construct(string $url,?Data $request = null) {
 		$this->url = self::$baseurl.$url;
@@ -82,6 +82,9 @@ class Client {
 
 	public function response(bool $parse = false) : mixed {
 		if(!$parse) return $this->response;
+		if($this->response_type===false) {
+			return null;
+		}
 		if($this->response_type==='application/json') {
 			return JSON::decode($this->response);
 		}
