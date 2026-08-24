@@ -23,7 +23,8 @@ function server_calculate($operation) {
 
 		$json = \TRP\IronChannel\JSON::read();
 		if(!is_numeric($json->a ?? null) || !is_numeric($json->b ?? null)) {
-			\TRP\IronChannel\JSON::error('Not numbers',400);
+			$extra = ['helptext' => 'Both a and b must be numbers'];
+			\TRP\IronChannel\JSON::error('Not numbers',400,$extra);
 		}
 		$reply = ['system' => 'base-10'];
 		$reply['result'] = match($operation) {
