@@ -41,7 +41,7 @@ class JSON extends CurlOpt implements Data {
 		echo json_encode($value);
 		exit;
 	}
-	public static function error(string $string,int $code = 400,array $extra = null) : never {
+	public static function error(string $string,int $code = 400,?array $extra = null) : never {
 		$error = ['code' => $code,'message' => $string];
 		if($extra) $error += $extra;
 		self::output($error,$code);
