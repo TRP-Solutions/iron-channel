@@ -34,8 +34,8 @@ class JSON extends CurlOpt implements Data {
 	}
 
 	public static function output($value,int $code = 200) : never {
-		http_response_code($code);
 		if(!headers_sent()) {
+			http_response_code($code);
 			header('Content-Type: application/json');
 		}
 		echo json_encode($value);
