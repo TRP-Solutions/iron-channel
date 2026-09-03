@@ -10,6 +10,7 @@ class Client {
 	private static string $baseurl = '';
 	private static array $option = [];
 	private static Log|false $log = false;
+	private static ?string $useragent = 'IronChannel (https://github.com/TRP-Solutions/iron-channel)';
 
 	private string $url;
 	private array $query = [];
@@ -32,6 +33,9 @@ class Client {
 		}
 
 		$header = $this->header;
+		if(self::$useragent) {
+			$header[] = 'User-Agent: '.self::$useragent;
+		}
 		array_push($header, ...$this->request->curl_header());
 		if($this->auth) {
 			array_push($header, ...$this->auth->curl_header());
@@ -114,6 +118,9 @@ class Client {
 	}
 	public static function baseurl(string $baseurl) : void {
 		self::$baseurl = $baseurl;
+	}
+	public static function useragent(?string $useragent) : void {
+		self::$useragent = $useragent;
 	}
 	private function url() : string {
 		if($this->query) {

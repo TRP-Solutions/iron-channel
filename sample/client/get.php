@@ -11,6 +11,7 @@ sample_start();
 
 $baseurl = sample_baseurl();
 \TRP\IronChannel\Client::baseurl($baseurl);
+\TRP\IronChannel\Client::useragent('PHPTimeClient/1.0');
 \TRP\IronChannel\Client::log(new \TRP\IronChannel\Syslog());
 
 if(false) {
